@@ -1,8 +1,3 @@
-import time
-from threading import Thread
-from queue import Queue
-
-import cv2
 import numpy as np
 import pyrealsense2 as rs
 
@@ -17,12 +12,12 @@ class RealSense:
 
         self.pipeline.start(config)
 
+    def __del__(self):
+        self.pipeline.stop()
+
     def get_numpy_color_image(self):
         frames = self.pipeline.wait_for_frames()
         frames = frames.get_color_frame()
         frames = np.asanyarray(frames.get_data())
 
         return frames
-
-    def stop(self):
-        self.pipeline.stop()
